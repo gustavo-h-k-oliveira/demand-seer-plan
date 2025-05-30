@@ -30,10 +30,10 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
     <section className="mb-16">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-4">
             Faça Upload da Sua Planilha
           </h2>
-          <p className="text-gray-300 text-lg">
+          <p className="text-amber-700 text-lg">
             Suportamos arquivos Excel (.xlsx, .xls) e CSV
           </p>
         </div>
@@ -43,8 +43,8 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
           className={`
             relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-300 cursor-pointer
             ${isDragActive 
-              ? 'border-orange-400 bg-orange-500/10' 
-              : 'border-gray-600 hover:border-orange-500 bg-white/5'
+              ? 'border-amber-400 bg-amber-100/70' 
+              : 'border-amber-300 hover:border-amber-400 bg-white/60'
             }
             ${isLoading ? 'pointer-events-none opacity-50' : ''}
           `}
@@ -53,9 +53,9 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
           
           <div className="flex flex-col items-center space-y-4">
             {isLoading ? (
-              <Loader2 className="w-16 h-16 text-orange-400 animate-spin" />
+              <Loader2 className="w-16 h-16 text-amber-500 animate-spin" />
             ) : (
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center">
                 {isDragActive ? (
                   <Upload className="w-8 h-8 text-white" />
                 ) : (
@@ -67,34 +67,34 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
             <div>
               {isLoading ? (
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-amber-900 mb-2">
                     Processando com IA...
                   </h3>
-                  <p className="text-gray-400">
+                  <p className="text-amber-700">
                     Analisando dados e gerando previsões
                   </p>
                 </div>
               ) : isDragActive ? (
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-amber-900 mb-2">
                     Solte o arquivo aqui
                   </h3>
-                  <p className="text-gray-400">
+                  <p className="text-amber-700">
                     Vamos processar sua planilha automaticamente
                   </p>
                 </div>
               ) : (
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-amber-900 mb-2">
                     Arraste sua planilha aqui
                   </h3>
-                  <p className="text-gray-400 mb-4">
+                  <p className="text-amber-700 mb-4">
                     ou clique para selecionar um arquivo
                   </p>
                   <Button 
                     variant="outline" 
                     size="lg"
-                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    className="bg-white/80 border-amber-300 text-amber-800 hover:bg-amber-50"
                   >
                     Selecionar Arquivo
                   </Button>
@@ -105,7 +105,7 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-amber-600">
             Formatos aceitos: .xlsx, .xls, .csv • Tamanho máximo: 10MB
           </p>
         </div>

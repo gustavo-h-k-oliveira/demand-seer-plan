@@ -25,7 +25,7 @@ const Index = () => {
   } = useAnalysis();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-orange-900">
+    <div className="min-h-screen bg-gradient-to-br from-amber-100 via-orange-200 to-yellow-100">
       <Header />
       <Hero />
       <div className="container mx-auto px-4 py-12">
