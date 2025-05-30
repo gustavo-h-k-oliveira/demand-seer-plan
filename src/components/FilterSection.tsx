@@ -31,7 +31,7 @@ const FilterSection = ({
     <Card className="bg-white/5 border-white/10 backdrop-blur-lg mb-6">
       <CardContent className="p-6">
         <div className="flex items-center space-x-2 mb-4">
-          <Filter className="w-5 h-5 text-purple-400" />
+          <Filter className="w-5 h-5 text-orange-400" />
           <h3 className="text-lg font-semibold text-white">Filtros</h3>
         </div>
         
@@ -42,7 +42,7 @@ const FilterSection = ({
               placeholder="Buscar produto..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-500"
+              className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-orange-500"
             />
           </div>
           

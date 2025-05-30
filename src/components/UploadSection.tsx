@@ -43,8 +43,8 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
           className={`
             relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-300 cursor-pointer
             ${isDragActive 
-              ? 'border-purple-400 bg-purple-500/10' 
-              : 'border-gray-600 hover:border-purple-500 bg-white/5'
+              ? 'border-orange-400 bg-orange-500/10' 
+              : 'border-gray-600 hover:border-orange-500 bg-white/5'
             }
             ${isLoading ? 'pointer-events-none opacity-50' : ''}
           `}
@@ -53,9 +53,9 @@ const UploadSection = ({ onUpload, isLoading }: UploadSectionProps) => {
           
           <div className="flex flex-col items-center space-y-4">
             {isLoading ? (
-              <Loader2 className="w-16 h-16 text-purple-400 animate-spin" />
+              <Loader2 className="w-16 h-16 text-orange-400 animate-spin" />
             ) : (
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center">
                 {isDragActive ? (
                   <Upload className="w-8 h-8 text-white" />
                 ) : (
