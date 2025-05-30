@@ -7,7 +7,22 @@ import AnalysisResults from '@/components/AnalysisResults';
 import { useAnalysis } from '@/hooks/useAnalysis';
 
 const Index = () => {
-  const { data, isLoading, uploadFile, results } = useAnalysis();
+  const { 
+    data, 
+    isLoading, 
+    uploadFile, 
+    results,
+    filteredProducts,
+    filteredSummary,
+    searchTerm,
+    setSearchTerm,
+    selectedCategory,
+    setSelectedCategory,
+    selectedTrend,
+    setSelectedTrend,
+    categories,
+    clearFilters
+  } = useAnalysis();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -15,7 +30,21 @@ const Index = () => {
       <Hero />
       <div className="container mx-auto px-4 py-12">
         <UploadSection onUpload={uploadFile} isLoading={isLoading} />
-        {results && <AnalysisResults results={results} />}
+        {results && (
+          <AnalysisResults 
+            results={results}
+            filteredProducts={filteredProducts}
+            filteredSummary={filteredSummary}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            selectedTrend={selectedTrend}
+            setSelectedTrend={setSelectedTrend}
+            categories={categories}
+            onClearFilters={clearFilters}
+          />
+        )}
       </div>
     </div>
   );

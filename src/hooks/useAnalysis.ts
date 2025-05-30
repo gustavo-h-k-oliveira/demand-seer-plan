@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
 import { toast } from '@/hooks/use-toast';
@@ -26,6 +25,11 @@ export const useAnalysis = () => {
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<AnalysisResults | null>(null);
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedTrend, setSelectedTrend] = useState('all');
 
   const processMLAnalysis = (products: any[]): AnalysisResults => {
     console.log('Processing ML analysis for', products.length, 'products');
@@ -140,10 +144,64 @@ export const useAnalysis = () => {
     }
   };
 
+  // Get unique categories from results
+  const categories = useMemo(() => {
+    if (!results) return [];
+    const uniqueCategories = [...new Set(results.products.map(p => p.category).filter(Boolean))];
+    return uniqueCategories as string[];
+  }, [results]);
+
+  // Filter products based on current filters
+  const filteredProducts = useMemo(() => {
+    if (!results) return [];
+    
+    return results.products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      const matchesTrend = selectedTrend === 'all' || product.trend === selectedTrend;
+      
+      return matchesSearch && matchesCategory && matchesTrend;
+    });
+  }, [results, searchTerm, selectedCategory, selectedTrend]);
+
+  // Calculate filtered summary
+  const filteredSummary = useMemo(() => {
+    if (filteredProducts.length === 0) return null;
+    
+    const totalProducts = filteredProducts.length;
+    const avgGrowth = filteredProducts.reduce((acc, p) => {
+      return acc + ((p.predictedDemand - p.currentDemand) / p.currentDemand) * 100;
+    }, 0) / totalProducts;
+    
+    const highDemandProducts = filteredProducts.filter(p => p.trend === 'up').length;
+
+    return {
+      totalProducts,
+      avgGrowth,
+      highDemandProducts
+    };
+  }, [filteredProducts]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCategory('all');
+    setSelectedTrend('all');
+  };
+
   return {
     data,
     isLoading,
     uploadFile,
-    results
+    results,
+    filteredProducts,
+    filteredSummary,
+    searchTerm,
+    setSearchTerm,
+    selectedCategory,
+    setSelectedCategory,
+    selectedTrend,
+    setSelectedTrend,
+    categories,
+    clearFilters
   };
 };
