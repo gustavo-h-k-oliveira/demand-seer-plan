@@ -1,11 +1,21 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import UploadSection from '@/components/UploadSection';
+import AnalysisResults from '@/components/AnalysisResults';
+import { useAnalysis } from '@/hooks/useAnalysis';
 
 const Index = () => {
+  const { data, isLoading, uploadFile, results } = useAnalysis();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <Header />
+      <Hero />
+      <div className="container mx-auto px-4 py-12">
+        <UploadSection onUpload={uploadFile} isLoading={isLoading} />
+        {results && <AnalysisResults results={results} />}
       </div>
     </div>
   );
