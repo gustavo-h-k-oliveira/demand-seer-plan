@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { TrendingUp, TrendingDown, AlertTriangle, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import DemandChart from './DemandChart';
+import MultiChart from './MultiChart';
 import FilterSection from './FilterSection';
 
 interface Product {
@@ -150,11 +149,11 @@ const AnalysisResults = ({
         </Card>
       </div>
 
-      {/* Chart */}
+      {/* Updated Chart Section */}
       <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
         <CardHeader>
           <CardTitle className="text-gray-800">
-            Previsão de Demanda por Produto
+            Análise Visual dos Dados
             {filteredSummary && (
               <span className="text-sm text-gray-500 ml-2">
                 ({displayProducts.length} de {results.products.length} produtos)
@@ -163,7 +162,7 @@ const AnalysisResults = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <DemandChart data={displayProducts} />
+          <MultiChart data={displayProducts} />
         </CardContent>
       </Card>
 

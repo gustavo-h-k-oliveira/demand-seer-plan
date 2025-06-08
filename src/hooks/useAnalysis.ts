@@ -10,6 +10,7 @@ interface Product {
   trend: 'up' | 'down' | 'stable';
   confidence: number;
   category?: string;
+  stockHistory?: { month: string; stock: number }[];
 }
 
 interface AnalysisResults {
@@ -51,13 +52,25 @@ export const useAnalysis = () => {
       
       const confidence = 0.7 + Math.random() * 0.25; // 70-95% confidence
       
+      // Generate stock history for last 6 months
+      const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+      const stockHistory = months.map((month, monthIndex) => {
+        const baseStock = baseValue + Math.floor(Math.random() * 200) - 100;
+        const seasonalVariation = 1 + 0.2 * Math.sin(monthIndex * 0.8);
+        return {
+          month,
+          stock: Math.max(0, Math.round(baseStock * seasonalVariation))
+        };
+      });
+
       return {
         name: product.produto || product.nome || product.item || `Produto ${index + 1}`,
         currentDemand: baseValue,
         predictedDemand: predicted,
         trend,
         confidence,
-        category: product.categoria || product.category || 'Geral'
+        category: product.categoria || product.category || 'Geral',
+        stockHistory
       };
     });
 
