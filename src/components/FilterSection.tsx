@@ -13,7 +13,10 @@ interface FilterSectionProps {
   setSelectedCategory: (category: string) => void;
   selectedTrend: string;
   setSelectedTrend: (trend: string) => void;
+  selectedManagement: string;
+  setSelectedManagement: (management: string) => void;
   categories: string[];
+  managements: string[];
   onClearFilters: () => void;
 }
 
@@ -24,7 +27,10 @@ const FilterSection = ({
   setSelectedCategory,
   selectedTrend,
   setSelectedTrend,
+  selectedManagement,
+  setSelectedManagement,
   categories,
+  managements,
   onClearFilters
 }: FilterSectionProps) => {
   return (
@@ -35,7 +41,7 @@ const FilterSection = ({
           <h3 className="text-lg font-semibold text-gray-800">Filtros</h3>
         </div>
         
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-5 gap-4">
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500" />
             <Input
@@ -69,6 +75,20 @@ const FilterSection = ({
               <SelectItem value="up">Em alta</SelectItem>
               <SelectItem value="stable">Estável</SelectItem>
               <SelectItem value="down">Em baixa</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={selectedManagement} onValueChange={setSelectedManagement}>
+            <SelectTrigger className="bg-white/90 border-orange-200 text-gray-800">
+              <SelectValue placeholder="Gerência" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as gerências</SelectItem>
+              {managements.map((management) => (
+                <SelectItem key={management} value={management}>
+                  {management}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           

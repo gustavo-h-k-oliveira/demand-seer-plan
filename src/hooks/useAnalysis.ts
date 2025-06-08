@@ -11,6 +11,12 @@ interface Product {
   confidence: number;
   category?: string;
   stockHistory?: { month: string; stock: number }[];
+  dailyStockHistory?: { date: string; stock: number }[];
+  management?: string;
+  currentStock?: number;
+  revenue?: number;
+  salesTarget?: number;
+  salesPercentage?: number;
 }
 
 interface AnalysisResults {
@@ -31,9 +37,12 @@ export const useAnalysis = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTrend, setSelectedTrend] = useState('all');
+  const [selectedManagement, setSelectedManagement] = useState('all');
 
   const processMLAnalysis = (products: any[]): AnalysisResults => {
     console.log('Processing ML analysis for', products.length, 'products');
+    
+    const managements = ['Gerência Norte', 'Gerência Sul', 'Gerência Leste', 'Gerência Oeste', 'Gerência Centro'];
     
     const analyzedProducts: Product[] = products.map((product, index) => {
       // Simulate ML analysis with realistic patterns
@@ -63,6 +72,26 @@ export const useAnalysis = () => {
         };
       });
 
+      // Generate daily stock history for last 30 days
+      const dailyStockHistory = [];
+      const today = new Date();
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const baseStock = baseValue + Math.floor(Math.random() * 100) - 50;
+        const dailyVariation = 1 + 0.1 * Math.sin(i * 0.5);
+        dailyStockHistory.push({
+          date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+          stock: Math.max(0, Math.round(baseStock * dailyVariation))
+        });
+      }
+
+      // Generate sales metrics
+      const currentStock = Math.floor(Math.random() * 500) + 50;
+      const revenue = Math.floor(Math.random() * 100000) + 10000;
+      const salesTarget = Math.floor(revenue * (1 + Math.random() * 0.5));
+      const salesPercentage = Math.round((revenue / salesTarget) * 100);
+
       return {
         name: product.produto || product.nome || product.item || `Produto ${index + 1}`,
         currentDemand: baseValue,
@@ -70,7 +99,13 @@ export const useAnalysis = () => {
         trend,
         confidence,
         category: product.categoria || product.category || 'Geral',
-        stockHistory
+        stockHistory,
+        dailyStockHistory,
+        management: managements[Math.floor(Math.random() * managements.length)],
+        currentStock,
+        revenue,
+        salesTarget,
+        salesPercentage
       };
     });
 
@@ -157,11 +192,17 @@ export const useAnalysis = () => {
     }
   };
 
-  // Get unique categories from results
+  // Get unique categories and managements from results
   const categories = useMemo(() => {
     if (!results) return [];
     const uniqueCategories = [...new Set(results.products.map(p => p.category).filter(Boolean))];
     return uniqueCategories as string[];
+  }, [results]);
+
+  const managements = useMemo(() => {
+    if (!results) return [];
+    const uniqueManagements = [...new Set(results.products.map(p => p.management).filter(Boolean))];
+    return uniqueManagements as string[];
   }, [results]);
 
   // Filter products based on current filters
@@ -172,10 +213,11 @@ export const useAnalysis = () => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
       const matchesTrend = selectedTrend === 'all' || product.trend === selectedTrend;
+      const matchesManagement = selectedManagement === 'all' || product.management === selectedManagement;
       
-      return matchesSearch && matchesCategory && matchesTrend;
+      return matchesSearch && matchesCategory && matchesTrend && matchesManagement;
     });
-  }, [results, searchTerm, selectedCategory, selectedTrend]);
+  }, [results, searchTerm, selectedCategory, selectedTrend, selectedManagement]);
 
   // Calculate filtered summary
   const filteredSummary = useMemo(() => {
@@ -199,6 +241,7 @@ export const useAnalysis = () => {
     setSearchTerm('');
     setSelectedCategory('all');
     setSelectedTrend('all');
+    setSelectedManagement('all');
   };
 
   return {
@@ -214,7 +257,10 @@ export const useAnalysis = () => {
     setSelectedCategory,
     selectedTrend,
     setSelectedTrend,
+    selectedManagement,
+    setSelectedManagement,
     categories,
+    managements,
     clearFilters
   };
 };

@@ -20,7 +20,10 @@ const Index = () => {
     setSelectedCategory,
     selectedTrend,
     setSelectedTrend,
+    selectedManagement,
+    setSelectedManagement,
     categories,
+    managements,
     clearFilters
   } = useAnalysis();
 
@@ -41,7 +44,10 @@ const Index = () => {
             setSelectedCategory={setSelectedCategory}
             selectedTrend={selectedTrend}
             setSelectedTrend={setSelectedTrend}
+            selectedManagement={selectedManagement}
+            setSelectedManagement={setSelectedManagement}
             categories={categories}
+            managements={managements}
             onClearFilters={clearFilters}
           />
         )}

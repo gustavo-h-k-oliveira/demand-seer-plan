@@ -1,8 +1,11 @@
+
 import React from 'react';
 import { TrendingUp, TrendingDown, AlertTriangle, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import MultiChart from './MultiChart';
+import DemandChart from './DemandChart';
+import StockHistoryChart from './StockHistoryChart';
+import SalesMetricsTable from './SalesMetricsTable';
 import FilterSection from './FilterSection';
 
 interface Product {
@@ -12,6 +15,7 @@ interface Product {
   trend: 'up' | 'down' | 'stable';
   confidence: number;
   category?: string;
+  management?: string;
 }
 
 interface AnalysisResultsProps {
@@ -35,7 +39,10 @@ interface AnalysisResultsProps {
   setSelectedCategory: (category: string) => void;
   selectedTrend: string;
   setSelectedTrend: (trend: string) => void;
+  selectedManagement: string;
+  setSelectedManagement: (management: string) => void;
   categories: string[];
+  managements: string[];
   onClearFilters: () => void;
 }
 
@@ -49,7 +56,10 @@ const AnalysisResults = ({
   setSelectedCategory,
   selectedTrend,
   setSelectedTrend,
+  selectedManagement,
+  setSelectedManagement,
   categories,
+  managements,
   onClearFilters
 }: AnalysisResultsProps) => {
   const displaySummary = filteredSummary || results.summary;
@@ -95,7 +105,10 @@ const AnalysisResults = ({
         setSelectedCategory={setSelectedCategory}
         selectedTrend={selectedTrend}
         setSelectedTrend={setSelectedTrend}
+        selectedManagement={selectedManagement}
+        setSelectedManagement={setSelectedManagement}
         categories={categories}
+        managements={managements}
         onClearFilters={onClearFilters}
       />
 
@@ -149,11 +162,11 @@ const AnalysisResults = ({
         </Card>
       </div>
 
-      {/* Updated Chart Section */}
+      {/* Demand Chart Section */}
       <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
         <CardHeader>
           <CardTitle className="text-gray-800">
-            Análise Visual dos Dados
+            Análise de Demanda
             {filteredSummary && (
               <span className="text-sm text-gray-500 ml-2">
                 ({displayProducts.length} de {results.products.length} produtos)
@@ -162,9 +175,29 @@ const AnalysisResults = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <MultiChart data={displayProducts} />
+          <DemandChart data={displayProducts} />
         </CardContent>
       </Card>
+
+      {/* Stock History Chart Section */}
+      <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-gray-800">
+            Histórico de Estoque
+            {filteredSummary && (
+              <span className="text-sm text-gray-500 ml-2">
+                ({displayProducts.length} de {results.products.length} produtos)
+              </span>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <StockHistoryChart data={displayProducts} />
+        </CardContent>
+      </Card>
+
+      {/* Sales Metrics Table */}
+      <SalesMetricsTable data={displayProducts} />
 
       {/* Products List */}
       <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
@@ -191,9 +224,10 @@ const AnalysisResults = ({
                         <span className="ml-1 capitalize">{product.trend}</span>
                       </Badge>
                     </div>
-                    {product.category && (
-                      <p className="text-sm text-gray-500 mb-2">{product.category}</p>
-                    )}
+                    <div className="flex space-x-4 text-sm text-gray-500">
+                      {product.category && <span>Categoria: {product.category}</span>}
+                      {product.management && <span>Gerência: {product.management}</span>}
+                    </div>
                   </div>
                   
                   <div className="text-right space-y-1">
