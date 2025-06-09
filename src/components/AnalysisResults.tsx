@@ -1,12 +1,14 @@
 
-import React from 'react';
-import { TrendingUp, TrendingDown, AlertTriangle, Target } from 'lucide-react';
+import React, { useState } from 'react';
+import { TrendingUp, TrendingDown, AlertTriangle, Target, ChevronUp, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import DemandChart from './DemandChart';
 import StockHistoryChart from './StockHistoryChart';
 import SalesMetricsTable from './SalesMetricsTable';
 import FilterSection from './FilterSection';
+import ExportReports from './ExportReports';
 
 interface Product {
   name: string;
@@ -62,6 +64,8 @@ const AnalysisResults = ({
   managements,
   onClearFilters
 }: AnalysisResultsProps) => {
+  const [isProductDetailsExpanded, setIsProductDetailsExpanded] = useState(true);
+  
   const displaySummary = filteredSummary || results.summary;
   const displayProducts = filteredProducts.length > 0 ? filteredProducts : results.products;
 
@@ -111,6 +115,9 @@ const AnalysisResults = ({
         managements={managements}
         onClearFilters={onClearFilters}
       />
+
+      {/* Export Reports Section */}
+      <ExportReports products={displayProducts} summary={displaySummary} />
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
@@ -201,51 +208,63 @@ const AnalysisResults = ({
 
       {/* Products List */}
       <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-gray-800">Detalhes por Produto</CardTitle>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-gray-800">Detalhes por Produto</CardTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsProductDetailsExpanded(!isProductDetailsExpanded)}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              {isProductDetailsExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
-          {displayProducts.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">Nenhum produto encontrado com os filtros aplicados.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {displayProducts.map((product, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 bg-white/70 rounded-lg border border-orange-200 hover:border-orange-400 transition-all duration-200 shadow-sm"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="font-semibold text-gray-800">{product.name}</h3>
-                      <Badge className={getTrendColor(product.trend)}>
-                        {getTrendIcon(product.trend)}
-                        <span className="ml-1 capitalize">{product.trend}</span>
-                      </Badge>
+        {isProductDetailsExpanded && (
+          <CardContent className="pt-0">
+            {displayProducts.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500">Nenhum produto encontrado com os filtros aplicados.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {displayProducts.map((product, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-white/70 rounded-lg border border-orange-200 hover:border-orange-400 transition-all duration-200 shadow-sm"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <h3 className="font-semibold text-gray-800">{product.name}</h3>
+                        <Badge className={getTrendColor(product.trend)}>
+                          {getTrendIcon(product.trend)}
+                          <span className="ml-1 capitalize">{product.trend}</span>
+                        </Badge>
+                      </div>
+                      <div className="flex space-x-4 text-sm text-gray-500">
+                        {product.category && <span>Categoria: {product.category}</span>}
+                        {product.management && <span>Gerência: {product.management}</span>}
+                      </div>
                     </div>
-                    <div className="flex space-x-4 text-sm text-gray-500">
-                      {product.category && <span>Categoria: {product.category}</span>}
-                      {product.management && <span>Gerência: {product.management}</span>}
+                    
+                    <div className="text-right space-y-1">
+                      <div className="text-sm text-gray-600">
+                        Atual: <span className="text-gray-800 font-medium">{product.currentDemand}</span>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Previsto: <span className="text-orange-600 font-medium">{product.predictedDemand}</span>
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Confiança: {(product.confidence * 100).toFixed(0)}%
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="text-right space-y-1">
-                    <div className="text-sm text-gray-600">
-                      Atual: <span className="text-gray-800 font-medium">{product.currentDemand}</span>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Previsto: <span className="text-orange-600 font-medium">{product.predictedDemand}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      Confiança: {(product.confidence * 100).toFixed(0)}%
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        )}
       </Card>
     </section>
   );

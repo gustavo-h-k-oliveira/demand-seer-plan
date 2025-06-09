@@ -17,6 +17,8 @@ interface Product {
   revenue?: number;
   salesTarget?: number;
   salesPercentage?: number;
+  weight?: number;
+  weightTarget?: number;
 }
 
 interface AnalysisResults {
@@ -86,11 +88,11 @@ export const useAnalysis = () => {
         });
       }
 
-      // Generate sales metrics
+      // Generate sales metrics with weight data
       const currentStock = Math.floor(Math.random() * 500) + 50;
-      const revenue = Math.floor(Math.random() * 100000) + 10000;
-      const salesTarget = Math.floor(revenue * (1 + Math.random() * 0.5));
-      const salesPercentage = Math.round((revenue / salesTarget) * 100);
+      const weight = Math.floor(Math.random() * 500) + 50;
+      const weightTarget = Math.floor(weight * (1.2 + Math.random() * 0.6));
+      const salesPercentage = Math.round((weight / weightTarget) * 100);
 
       return {
         name: product.produto || product.nome || product.item || `Produto ${index + 1}`,
@@ -103,8 +105,8 @@ export const useAnalysis = () => {
         dailyStockHistory,
         management: managements[Math.floor(Math.random() * managements.length)],
         currentStock,
-        revenue,
-        salesTarget,
+        weight,
+        weightTarget,
         salesPercentage
       };
     });
