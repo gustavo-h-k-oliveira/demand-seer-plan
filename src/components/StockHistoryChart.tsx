@@ -4,6 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface Product {
   name: string;
@@ -17,6 +19,7 @@ interface StockHistoryChartProps {
 
 const StockHistoryChart = ({ data }: StockHistoryChartProps) => {
   const [periodFilter, setPeriodFilter] = useState(30);
+  const [isProductFilterOpen, setIsProductFilterOpen] = useState(false);
   
   // Initialize with top 3 products by demand
   const defaultSelectedProducts = useMemo(() => {
@@ -113,63 +116,70 @@ const StockHistoryChart = ({ data }: StockHistoryChartProps) => {
     { days: 7, label: '7 dias' },
     { days: 15, label: '15 dias' },
     { days: 30, label: '30 dias' },
-    { days: 60, label: '2 meses' },
-    { days: 90, label: '3 meses' },
-    { days: 180, label: '6 meses' }
+    { days: 60, label: '2 meses' }
   ];
 
   return (
     <div className="space-y-4">
-      {/* Product Selection Section */}
-      <Card className="bg-white/90 border-orange-200">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-gray-700">
-            Selecionar Produtos ({selectedProducts.length}/10)
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="select-all"
-                checked={selectedProducts.length === Math.min(data.length, 10)}
-                onCheckedChange={handleSelectAll}
-              />
-              <label
-                htmlFor="select-all"
-                className="text-sm font-medium text-gray-700 cursor-pointer"
-              >
-                Selecionar Todos
-              </label>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-32 overflow-y-auto">
-              {data.slice(0, 10).map((product) => (
-                <div key={product.name} className="flex items-center space-x-2">
+      {/* Collapsible Product Selection Section */}
+      <Collapsible open={isProductFilterOpen} onOpenChange={setIsProductFilterOpen}>
+        <Card className="bg-white/90 border-orange-200">
+          <CollapsibleTrigger asChild>
+            <CardHeader className="pb-3 cursor-pointer hover:bg-orange-50/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-gray-700">
+                  Filtro de Produtos ({selectedProducts.length}/10)
+                </CardTitle>
+                {isProductFilterOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="pt-0">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
                   <Checkbox
-                    id={product.name}
-                    checked={selectedProducts.includes(product.name)}
-                    onCheckedChange={() => handleProductToggle(product.name)}
+                    id="select-all"
+                    checked={selectedProducts.length === Math.min(data.length, 10)}
+                    onCheckedChange={handleSelectAll}
                   />
                   <label
-                    htmlFor={product.name}
-                    className="text-xs text-gray-600 cursor-pointer truncate flex-1"
-                    title={product.name}
+                    htmlFor="select-all"
+                    className="text-sm font-medium text-gray-700 cursor-pointer"
                   >
-                    {product.name}
+                    Selecionar Todos
                   </label>
                 </div>
-              ))}
-            </div>
-            
-            {data.length > 10 && (
-              <p className="text-xs text-gray-500">
-                Mostrando primeiros 10 produtos. Máximo de 10 produtos podem ser selecionados.
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-32 overflow-y-auto">
+                  {data.slice(0, 10).map((product) => (
+                    <div key={product.name} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={product.name}
+                        checked={selectedProducts.includes(product.name)}
+                        onCheckedChange={() => handleProductToggle(product.name)}
+                      />
+                      <label
+                        htmlFor={product.name}
+                        className="text-xs text-gray-600 cursor-pointer truncate flex-1"
+                        title={product.name}
+                      >
+                        {product.name}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                
+                {data.length > 10 && (
+                  <p className="text-xs text-gray-500">
+                    Mostrando primeiros 10 produtos. Máximo de 10 produtos podem ser selecionados.
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
 
       {/* Period Filter Buttons */}
       <div className="flex flex-wrap gap-2">

@@ -116,55 +116,52 @@ const AnalysisResults = ({
         onClearFilters={onClearFilters}
       />
 
-      {/* Export Reports Section */}
-      <ExportReports products={displayProducts} summary={displaySummary} />
-
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
         <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-gray-600 text-sm font-medium flex items-center">
+          <CardHeader className="pb-2 text-center">
+            <CardTitle className="text-gray-600 text-sm font-medium flex items-center justify-center">
               <Target className="w-4 h-4 mr-2" />
               Total de Produtos
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-800">
+          <CardContent className="text-center">
+            <div className="text-4xl font-bold text-gray-800 mb-2">
               {displaySummary.totalProducts}
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-sm text-gray-500">
               {filteredSummary ? 'produtos filtrados' : 'produtos analisados'}
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-gray-600 text-sm font-medium flex items-center">
+          <CardHeader className="pb-2 text-center">
+            <CardTitle className="text-gray-600 text-sm font-medium flex items-center justify-center">
               <TrendingUp className="w-4 h-4 mr-2" />
               Crescimento Médio
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-800">
+          <CardContent className="text-center">
+            <div className="text-4xl font-bold text-gray-800 mb-2">
               {results.summary.avgGrowth > 0 ? '+' : ''}{results.summary.avgGrowth.toFixed(1)}%
             </div>
-            <p className="text-xs text-gray-500 mt-1">previsão próximo período</p>
+            <p className="text-sm text-gray-500">previsão próximo período</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-gray-600 text-sm font-medium flex items-center">
+          <CardHeader className="pb-2 text-center">
+            <CardTitle className="text-gray-600 text-sm font-medium flex items-center justify-center">
               <AlertTriangle className="w-4 h-4 mr-2" />
               Alta Demanda
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-800">
+          <CardContent className="text-center">
+            <div className="text-4xl font-bold text-gray-800 mb-2">
               {results.summary.highDemandProducts}
             </div>
-            <p className="text-xs text-gray-500 mt-1">produtos em alta</p>
+            <p className="text-sm text-gray-500">produtos em alta</p>
           </CardContent>
         </Card>
       </div>
@@ -266,6 +263,9 @@ const AnalysisResults = ({
           </CardContent>
         )}
       </Card>
+
+      {/* Export Reports Section - Moved to the end */}
+      <ExportReports products={displayProducts} summary={displaySummary} />
     </section>
   );
 };

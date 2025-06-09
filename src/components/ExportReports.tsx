@@ -156,32 +156,36 @@ const ExportReports = ({ products, summary }: ExportReportsProps) => {
 
   return (
     <Card className="bg-white/90 border-orange-200 backdrop-blur-lg shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-gray-800 flex items-center">
-          <Download className="w-5 h-5 mr-2" />
+      <CardHeader className="text-center">
+        <CardTitle className="text-gray-800 flex items-center justify-center text-xl">
+          <Download className="w-6 h-6 mr-3" />
           Exportar Relatórios
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            onClick={generatePDF}
-            className="flex items-center bg-red-600 hover:bg-red-700 text-white"
-          >
-            <FileText className="w-4 h-4 mr-2" />
-            Exportar PDF
-          </Button>
-          <Button
-            onClick={generateCSV}
-            className="flex items-center bg-green-600 hover:bg-green-700 text-white"
-          >
-            <FileSpreadsheet className="w-4 h-4 mr-2" />
-            Exportar CSV
-          </Button>
+        <div className="flex flex-col items-center space-y-6">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Button
+              onClick={generatePDF}
+              size="lg"
+              className="flex items-center bg-red-600 hover:bg-red-700 text-white px-8 py-4 text-lg"
+            >
+              <FileText className="w-6 h-6 mr-3" />
+              Exportar PDF
+            </Button>
+            <Button
+              onClick={generateCSV}
+              size="lg"
+              className="flex items-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg"
+            >
+              <FileSpreadsheet className="w-6 h-6 mr-3" />
+              Exportar CSV
+            </Button>
+          </div>
+          <p className="text-sm text-gray-500 text-center max-w-md">
+            Exporte os dados da análise em formato PDF para relatórios ou CSV para processamento adicional.
+          </p>
         </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Exporte os dados da análise em formato PDF para relatórios ou CSV para processamento adicional.
-        </p>
       </CardContent>
     </Card>
   );
