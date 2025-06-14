@@ -70,7 +70,13 @@ export const useProcessingLogs = () => {
         return;
       }
 
-      setLogs(data || []);
+      // Type cast the data to match ProcessingLog interface
+      const typedLogs: ProcessingLog[] = (data || []).map(log => ({
+        ...log,
+        status: log.status as 'success' | 'error'
+      }));
+
+      setLogs(typedLogs);
     } catch (error) {
       console.error('Erro ao buscar logs:', error);
     } finally {
