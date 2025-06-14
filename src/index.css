@@ -98,4 +98,14 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  body.font-size-base {
+    font-size: 1rem;
+  }
+  body.font-size-large {
+    font-size: 1.125rem;
+  }
+  body.font-size-xlarge {
+    font-size: 1.25rem;
+  }
 }

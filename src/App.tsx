@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Logs from "./pages/Logs";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/logs" element={<Logs />} />
+            <Route path="/settings" element={<Settings />} />
             {/* Futuramente, se quiser implementar, a página de configurações pode ir aqui */}
           </Routes>
         </BrowserRouter>
