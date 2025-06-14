@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import Papa from 'papaparse';
 import { toast } from '@/hooks/use-toast';
+import { useProcessingLogs } from './useProcessingLogs';
 
 interface Product {
   name: string;
@@ -40,6 +41,8 @@ export const useAnalysis = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTrend, setSelectedTrend] = useState('all');
   const [selectedManagement, setSelectedManagement] = useState('all');
+
+  const { createLog } = useProcessingLogs();
 
   const processMLAnalysis = (products: any[]): AnalysisResults => {
     console.log('Processing ML analysis for', products.length, 'products');
@@ -177,6 +180,14 @@ export const useAnalysis = () => {
       const analysisResults = processMLAnalysis(parsedData);
       setResults(analysisResults);
       
+      // Log successful processing
+      await createLog(
+        file.name,
+        file.size,
+        analysisResults.products.length,
+        'success'
+      );
+      
       toast({
         title: "Análise Concluída!",
         description: `${analysisResults.products.length} produtos analisados com sucesso.`,
@@ -184,6 +195,16 @@ export const useAnalysis = () => {
       
     } catch (error) {
       console.error('File processing error:', error);
+      
+      // Log failed processing
+      await createLog(
+        file.name,
+        file.size,
+        0,
+        'error',
+        error instanceof Error ? error.message : "Erro desconhecido"
+      );
+      
       toast({
         title: "Erro no Processamento",
         description: error instanceof Error ? error.message : "Erro desconhecido ao processar arquivo",
